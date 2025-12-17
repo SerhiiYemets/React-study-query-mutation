@@ -1,4 +1,4 @@
-import {useMutation} from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 
 import { createTask } from "../../services/taskService";
 import css from "./TaskForm.module.css";
@@ -8,10 +8,11 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ onSuccess }: TaskFormProps) {
-
+    const queryClient = useQueryClient();
     const { mutate, isPending } = useMutation({
         mutationFn: createTask,
         onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["tasks"]})
             onSuccess();
         },
         onError: (error) => {

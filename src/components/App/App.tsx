@@ -11,13 +11,16 @@ export default function App() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const [counter, setCounter] = useState<number>(1);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: getTasks,
+    queryKey: ["tasks", counter],
+    queryFn: () => getTasks(counter),
   });
 
   return (
     <div className={css.container}>
+      <button onClick={() => setCounter(prevCounter => prevCounter + 1)}>+</button>
       <header className={css.header}>
         <button className={css.createButton} onClick={openModal}>
           Create task
